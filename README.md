@@ -1,3 +1,9 @@
+# MakeMoji/Quickblox Integration example
+
+This project is a modification of the QuickBlox Android SDK example to use the [MakeMoji SDK](https://github.com/makemoji/MakemojiSDK-Android) for the [Chat Sample](https://github.com/QuickBlox/quickblox-android-sdk/tree/master/sample-chat) project.
+To run it, add the line "mm.key=YOUR-KEY" to your local.properties file with your MakeMoji SDK key.
+Only a few files have been modified, namely ChatAdapter, DialogsAdapter, ChatActivity, and list_item_dialog.xml
+
 # QuickBlox Android SDK
 
 This project contains QuickBlox Android SDK, that includes
