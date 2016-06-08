@@ -10,11 +10,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.makemoji.mojilib.HyperMojiListener;
 import com.makemoji.mojilib.Moji;
 import com.makemoji.mojilib.ParsedAttributes;
 import com.quickblox.chat.model.QBAttachment;
@@ -64,6 +66,13 @@ public class ChatAdapter extends BaseListAdapter<QBChatMessage> implements Stick
             holder.messageInfoTextView = (TextView) convertView.findViewById(R.id.text_message_info);
             holder.attachmentImageView = (MaskedImageView) convertView.findViewById(R.id.image_message_attachment);
             holder.attachmentProgressBar = (ProgressBar) convertView.findViewById(R.id.progress_message_attachment);
+
+            holder.messageBodyTextView.setTag(R.id._makemoji_hypermoji_listener_tag_id, new HyperMojiListener() {
+                @Override
+                public void onClick(String url) {
+                    Toast.makeText(context,"Hypermoji clicked from chat adapter " + url,Toast.LENGTH_LONG).show();
+                }
+            });
 
             convertView.setTag(holder);
         } else {
@@ -196,9 +205,7 @@ public class ChatAdapter extends BaseListAdapter<QBChatMessage> implements Stick
                     .into(holder.attachmentImageView);
         } else {
            // holder.messageBodyTextView.setText(chatMessage.getBody());
-            ParsedAttributes attributes = Moji.parseHtml(chatMessage.getBody(),holder.messageBodyTextView,true);
             Moji.setText(chatMessage.getBody(),holder.messageBodyTextView,true);
-            Moji.setText(attributes.spanned,holder.messageBodyTextView);
             holder.messageBodyTextView.setVisibility(View.VISIBLE);
             holder.attachmentImageView.setVisibility(View.GONE);
             holder.attachmentProgressBar.setVisibility(View.GONE);

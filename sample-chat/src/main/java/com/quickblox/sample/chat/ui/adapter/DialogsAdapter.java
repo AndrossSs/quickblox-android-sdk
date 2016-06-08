@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.makemoji.mojilib.HyperMojiListener;
+import com.makemoji.mojilib.Moji;
 import com.quickblox.chat.model.QBDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.sample.chat.R;
@@ -36,6 +39,13 @@ public class DialogsAdapter extends BaseSelectableListAdapter<QBDialog> {
             holder.dialogImageView = (ImageView) convertView.findViewById(R.id.image_dialog_icon);
             holder.unreadCounterTextView = (TextView) convertView.findViewById(R.id.text_dialog_unread_count);
 
+            holder.lastMessageTextView.setTag(R.id._makemoji_hypermoji_listener_tag_id, new HyperMojiListener() {
+                @Override
+                public void onClick(String s) {
+                    Toast.makeText(context,"Hypermoji clicked from dialog adapter " +s,Toast.LENGTH_LONG).show();
+                }
+            });
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -54,7 +64,11 @@ public class DialogsAdapter extends BaseSelectableListAdapter<QBDialog> {
         if (isLastMessageAttachment(dialog)) {
             holder.lastMessageTextView.setText(R.string.chat_attachment);
         } else {
-            holder.lastMessageTextView.setText(dialog.getLastMessage());
+            //holder.lastMessageTextView.setText(dialog.getLastMessage());
+           if (dialog.getLastMessage()!=null)
+               Moji.setText(dialog.getLastMessage(),holder.lastMessageTextView,true);
+            else
+               Moji.setText("",holder.lastMessageTextView,true);
         }
 
         int unreadMessagesCount = dialog.getUnreadMessageCount();

@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:paddingLeft="@dimen/list_item_side_margin"
     android:paddingRight="@dimen/list_item_side_margin"
+    android:descendantFocusability="blocksDescendants"
     tools:ignore="RtlHardcoded">
 
     <ImageView
@@ -24,7 +25,10 @@
             tools:text="Room name" />
 
         <TextView
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:id="@+id/text_dialog_last_message"
+            android:layout_width="wrap_content"
             style="@style/DialogLastMessageStyle"
             tools:text="Long last message to see how margin on the right side works" />
     </LinearLayout>
