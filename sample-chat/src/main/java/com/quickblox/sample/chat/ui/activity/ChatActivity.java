@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.makemoji.mojilib.MojiInputLayout;
 import com.quickblox.chat.QBChat;
 import com.quickblox.chat.model.QBAttachment;
 import com.quickblox.chat.model.QBChatMessage;
@@ -79,6 +81,8 @@ public class ChatActivity extends BaseActivity implements OnImagePickedListener 
     private ArrayList<String> chatMessageIds;
     private ArrayList<QBChatMessage> unShownMessages;
     private int skipPagination = 0;
+
+    MojiInputLayout mojiInputLayout;
 
     public static void startForResult(Activity activity, int code, QBDialog dialog) {
         Intent intent = new Intent(activity, ChatActivity.class);
@@ -236,6 +240,7 @@ public class ChatActivity extends BaseActivity implements OnImagePickedListener 
         switch (requestCode) {
             case REQUEST_CODE_ATTACHMENT:
                 attachmentPreviewAdapter.add(file);
+                if (mojiInputLayout.getInputAsSpanned().length()==0) mojiInputLayout.setInputText(" ");//to enable the send button.
                 break;
         }
     }
@@ -297,6 +302,34 @@ public class ChatActivity extends BaseActivity implements OnImagePickedListener 
         messageEditText = _findViewById(R.id.edit_chat_message);
         progressBar = _findViewById(R.id.progress_chat);
         attachmentPreviewContainerLayout = _findViewById(R.id.layout_attachment_preview_container);
+        mojiInputLayout = _findViewById(R.id.mojiInput);
+        mojiInputLayout.setCameraButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAttachmentsClick(v);
+            }
+        });
+        mojiInputLayout.setSendLayoutClickListener(new MojiInputLayout.SendClickListener() {
+            @Override
+            public boolean onClick(String html, Spanned spanned) {
+
+                int totalAttachmentsCount = attachmentPreviewAdapter.getCount();
+                Collection<QBAttachment> uploadedAttachments = attachmentPreviewAdapter.getUploadedAttachments();
+                if (!uploadedAttachments.isEmpty()) {
+                    if (uploadedAttachments.size() == totalAttachmentsCount) {
+                        for (QBAttachment attachment : uploadedAttachments) {
+                            sendChatMessage(null, attachment);
+                        }
+                    } else {
+                        Toaster.shortToast(R.string.chat_wait_for_attachments_to_upload);
+                    }
+                }
+
+                    sendChatMessage(html, null);
+
+                return true;
+            }
+        });
 
         attachmentPreviewAdapter = new AttachmentPreviewAdapter(this,
                 new AttachmentPreviewAdapter.OnAttachmentCountChangedListener() {

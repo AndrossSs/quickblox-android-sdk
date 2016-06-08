@@ -9,6 +9,7 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        buildConfigField "String", "MakeMojiKey", "\""+getProps('mm.key')+"\""
     }
 }
 
@@ -20,4 +21,21 @@ dependencies {
     compile "com.android.support:design:${rootProject.designVersion}"
     compile "com.github.johnkil.android-robototextview:robototextview:${rootProject.robotoTextViewVersion}"
 
+    compile 'com.makemoji:makemoji-sdk-android:0.9.702'
+}
+repositories {
+    jcenter()
+    maven {
+        url "https://dl.bintray.com/mm/maven/"
+    }
+}
+def getProps(String propName) {
+    def propsFile = rootProject.file('local.properties')
+    if (propsFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        return props[propName]
+    } else {
+        return "";
+    }
 }

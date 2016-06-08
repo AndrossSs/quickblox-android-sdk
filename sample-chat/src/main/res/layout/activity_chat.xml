@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_chat_container"
     style="@style/MatchParent"
     tools:ignore="RtlHardcoded">
@@ -20,7 +21,7 @@
         android:id="@+id/layout_attachment_preview_container"
         style="@style/MatchWidth"
         android:layout_height="96dp"
-        android:layout_above="@+id/layout_chat_send_container"
+        android:layout_above="@+id/mojiInput"
         android:background="?attr/colorPrimary"
         android:orientation="vertical"
         android:visibility="gone">
@@ -37,13 +38,21 @@
     <View
         android:id="@+id/divider_chat"
         style="@style/HorizontalDividerStyle"
-        android:layout_above="@+id/layout_chat_send_container" />
-
+        android:layout_above="@+id/mojiInput" />
+    <com.makemoji.mojilib.MojiInputLayout
+        android:id="@+id/mojiInput"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        app:_mm_cameraButtonDrawable="@drawable/ic_action_attachment"
+        />
     <LinearLayout
         android:id="@+id/layout_chat_send_container"
         style="@style/MatchWidth"
         android:layout_alignParentBottom="true"
         android:background="?attr/colorPrimary"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <ImageButton

@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.makemoji.mojilib.Moji;
+import com.makemoji.mojilib.ParsedAttributes;
 import com.quickblox.chat.model.QBAttachment;
 import com.quickblox.chat.model.QBChatMessage;
 import com.quickblox.sample.chat.R;
@@ -193,7 +195,10 @@ public class ChatAdapter extends BaseListAdapter<QBChatMessage> implements Stick
                     .error(R.drawable.ic_error)
                     .into(holder.attachmentImageView);
         } else {
-            holder.messageBodyTextView.setText(chatMessage.getBody());
+           // holder.messageBodyTextView.setText(chatMessage.getBody());
+            ParsedAttributes attributes = Moji.parseHtml(chatMessage.getBody(),holder.messageBodyTextView,true);
+            Moji.setText(chatMessage.getBody(),holder.messageBodyTextView,true);
+            Moji.setText(attributes.spanned,holder.messageBodyTextView);
             holder.messageBodyTextView.setVisibility(View.VISIBLE);
             holder.attachmentImageView.setVisibility(View.GONE);
             holder.attachmentProgressBar.setVisibility(View.GONE);
